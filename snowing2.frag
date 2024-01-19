@@ -113,7 +113,6 @@ mat3 setCamera( in vec3 ro, in vec3 ta, in float cr) {
     return mat3( cu, cv, cw );
 }
 
-// blending https://www.shadertoy.com/view/XdS3RW
 vec3 screenBlending( vec3 s, vec3 d )
 {
 	return s + d - s * d;
