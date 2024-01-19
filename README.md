@@ -1,1 +1,1 @@
-Postprocessing 3D snowing shader
+snowing2.frag = Postprocessing 3D snowing shader
