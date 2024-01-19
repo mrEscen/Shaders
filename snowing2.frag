@@ -2,13 +2,12 @@
 
 // based on https://www.shadertoy.com/view/Xl2BRR
 
-layout(binding=0) uniform sampler2D 		texture;
-layout(binding=1) uniform sampler2D 		depthtexture;
+layout(binding=0) uniform sampler2D 		baseTexture;
+layout(binding=1) uniform sampler2D 		depthTexture;
 
 uniform vec3 camPos;
 uniform vec3 camDir;
 uniform vec3 windDir;
-
 
 uniform	float fogDistFar;
 uniform	float fogDistNear;
@@ -25,7 +24,6 @@ out vec4 FragColor;
 #define SNOW_VOXEL_STEPS 20 
 #define SNOW_VOXEL_STEP_SIZE 3
 #define SNOW_RADIUS .04
-
 
 float distanceRayPoint(vec3 ro, vec3 rd, vec3 p, out float h) {
     h = dot(p-ro,rd);
@@ -45,10 +43,10 @@ vec4 renderSnowField(in vec3 ro, in vec3 rd, in float tmax, vec3 depth) {
 	vec3 ros = ro;
 	ros /= SNOW_VOXEL_STEP_SIZE;
 	vec3 offset, id,
-	 pos = floor(ros),
-	     mm, ri = 1./rd,
-		 rs = sign(rd),
-		 dis = (pos-ros + .5 + rs*.5) * ri;
+	pos = floor(ros),
+	     	mm, ri = 1./rd,
+		rs = sign(rd),
+		dis = (pos-ros + .5 + rs*.5) * ri;
 	float dint, d = 0.;
 	vec4 col = vec4(0),sum = vec4(0);
 	dint=0.1;
@@ -79,11 +77,11 @@ vec4 renderSnowField(in vec3 ro, in vec3 rd, in float tmax, vec3 depth) {
 		mm = (step(dis, dis.yxy) * step(dis, dis.zzx));
 		dis += mm * rs * ri;
 	        pos += mm * rs;
-
 	}
 	//sum.rgb = clamp(sum.rgb,0.0,0.36);
 	return sum;
 }
+
 vec4 renderFog(vec3 depth, vec4 baseColor){
 	float dist = depth.r;
 	vec4 finalFogColor = vec4(0, 0, 0, 1);
@@ -106,8 +104,7 @@ vec3 screenBlending( vec3 s, vec3 d ){
 	return s + d - s * d;
 }
 void main(){
-
-	vec4 col = texture2D(texture, TexCoord.xy);
+	vec4 col = texture2D(baseTexture, TexCoord.xy);
 	if (camPos.y >900 ){
 	
 		vec3 pos, ro, rd = vec3(0), colorSum = vec3(0);
@@ -136,7 +133,7 @@ void main(){
 		// ray direction
 		rd = ca * normalize( vec3(p.xy,1.5) ); 
 
-		vec3 depth=texture2D(depthtexture, TexCoord.xy).xyz;
+		vec3 depth=texture2D(depthTexture, TexCoord.xy).xyz;
 		
 		vec4 fogColor = renderFog(depth, col);
 		
