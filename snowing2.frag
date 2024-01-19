@@ -130,8 +130,6 @@ void main(){
 		vec3 taVec = vec3(cos(angleHor-0.3),sin(angleVer),sin(angleHor-0.3));
 		ro = vec3(pos.x+taVec.x,(pos.y+taVec.y),pos.z+taVec.z);
 
-		//vec3 ta = vec3(pos.x,pos.y,pos.z);
-
 		// camera-to-world transformation
 		mat3 ca = setCamera(ro, pos, 0.);
 
